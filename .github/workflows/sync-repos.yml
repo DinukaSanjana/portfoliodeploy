@@ -13,7 +13,8 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # සියලුම commit history එක ලබා ගැනීමට
+          fetch-depth: 0
+          persist-credentials: false # අලුතින් එකතු කළ පේළිය: default bot token එක භාවිතා කිරීම නැවැත්වීමට
 
       - name: Push updates to Deploy Repo
         run: |
@@ -21,9 +22,8 @@ jobs:
           git config --global user.name "GitHub Actions Bot"
           git config --global user.email "actions@github.com"
           
-          # දෙවන repository එක remote එකක් ලෙස එකතු කිරීම
-          git remote add deploy_repo https://DinukaSanjana:${{ secrets.DEPLOY_PAT }}@github.com/DinukaSanjana/portfoliodeploy.git
+          # දෙවන repository එක remote එකක් ලෙස එකතු කිරීම (username එක ඉවත් කර PAT එක පමණක් ලබා දීම)
+          git remote add deploy_repo https://${{ secrets.DEPLOY_PAT }}@github.com/DinukaSanjana/portfoliodeploy.git
           
           # පළමු repo එකේ main branch එක දෙවන repo එකේ main branch එකට push කිරීම
-          # (ඔබේ branch එක master නම් 'main' වෙනුවට 'master' භාවිතා කරන්න)
           git push deploy_repo main --force
